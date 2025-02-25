@@ -5,7 +5,9 @@ tg.ready();
 // Загружаем конфигурацию Firebase через API Vercel
 fetch('/api/firebase')
     .then(response => {
-        if (!response.ok) throw new Error('Ошибка загрузки конфигурации Firebase');
+        if (!response.ok) {
+            throw new Error(`Ошибка загрузки конфигурации Firebase: ${response.status} - ${response.statusText}`);
+        }
         return response.json();
     })
     .then(firebaseConfig => {
