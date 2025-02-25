@@ -24,6 +24,7 @@ body {
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    color: white; /* Белый текст по умолчанию для контраста с чёрным фоном */
 }
 
 .timer {
@@ -43,25 +44,25 @@ body {
     animation: pulse 2s infinite;
 }
 
-#startBtn {
+#startBtn, #resetBtn {
     padding: 15px 30px;
-    margin: 20px 0;
-    background-color: #4CAF50; /* Зелёный цвет кнопки */
+    margin: 10px 0;
+    background-color: #4CAF50; /* Зелёный цвет для обеих кнопок */
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-size: 18px;
-    position: relative;
+    position: relative; /* Для позиционирования */
     transform: translateY(-50%);
     top: 40%; /* Позиция чуть выше центра (регулируйте для точной настройки) */
 }
 
-#startBtn:hover {
-    background-color: #45a049;
+#startBtn:hover, #resetBtn:hover {
+    background-color: #45a049; /* Тёмно-зелёный при наведении */
 }
 
-#startBtn.start-animation {
+#startBtn.start-animation, #resetBtn.start-animation {
     animation: buttonPress 0.5s ease-out;
 }
 
@@ -73,7 +74,6 @@ body {
 
 .friends-section {
     margin-top: 20px;
-    color: white; /* Белый текст для контраста */
     width: 90%;
     max-width: 400px;
 }
@@ -115,6 +115,7 @@ li {
     padding: 5px;
     background-color: #222;
     border-radius: 5px;
+    color: white; /* Белый текст для списка друзей */
 }
 
 /* Анимация пульсации для таймера */

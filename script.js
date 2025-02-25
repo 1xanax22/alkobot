@@ -6,6 +6,7 @@ tg.expand(); // Открываем мини-приложение на весь �
 // Получаем элементы DOM
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('startBtn');
+const resetBtn = document.getElementById('resetBtn');
 const friendIdInput = document.getElementById('friendId');
 const addFriendBtn = document.getElementById('addFriendBtn');
 const friendsList = document.getElementById('friendsList');
@@ -19,6 +20,8 @@ function updateTimer() {
     if (!startTime) {
         timerDisplay.innerText = 'Нажми "Старт", чтобы начать!';
         timerDisplay.classList.remove('active');
+        startBtn.style.display = 'block';
+        resetBtn.style.display = 'none';
         return;
     }
 
@@ -32,20 +35,25 @@ function updateTimer() {
 
     timerDisplay.innerText = `${days} дней, ${hours} часов, ${minutes} минут`;
     timerDisplay.classList.add('active');
+    startBtn.style.display = 'none';
+    resetBtn.style.display = 'block';
 }
 
 // Инициализация таймера, если он уже запущен
 if (startTime) {
     startBtn.style.display = 'none';
+    resetBtn.style.display = 'block';
     setInterval(updateTimer, 1000);
     updateTimer();
+} else {
+    startBtn.style.display = 'block';
+    resetBtn.style.display = 'none';
 }
 
 // Обработчик кнопки "Старт"
 startBtn.addEventListener('click', () => {
     startTime = new Date().toISOString();
     localStorage.setItem('startTime', startTime);
-    startBtn.style.display = 'none';
 
     // Добавляем анимацию нажатия на кнопку
     startBtn.classList.add('start-animation');
@@ -53,8 +61,24 @@ startBtn.addEventListener('click', () => {
         startBtn.classList.remove('start-animation');
     }, 500); // Убираем анимацию через 0.5 секунды
 
-    setInterval(updateTimer, 1000);
     updateTimer();
+    setInterval(updateTimer, 1000);
+});
+
+// Обработчик кнопки "Сброс"
+resetBtn.addEventListener('click', () => {
+    startTime = null;
+    localStorage.removeItem('startTime');
+    timerDisplay.innerText = 'Нажми "Старт", чтобы начать!';
+    timerDisplay.classList.remove('active');
+    startBtn.style.display = 'block';
+    resetBtn.style.display = 'none';
+
+    // Добавляем анимацию нажатия на кнопку "Сброс"
+    resetBtn.classList.add('start-animation');
+    setTimeout(() => {
+        resetBtn.classList.remove('start-animation');
+    }, 500); // Убираем анимацию через 0.5 секунды
 });
 
 // Функция отображения списка друзей
