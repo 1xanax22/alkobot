@@ -9,5 +9,8 @@ export default function handler(req, res) {
         appId: process.env.FIREBASE_APP_ID,
         measurementId: process.env.FIREBASE_MEASUREMENT_ID
     };
-    res.status(200).json(firebaseConfig);
+    res.status(200).json({
+        firebaseConfig: firebaseConfig,
+        botToken: process.env.BOT_TOKEN
+    });
 }
