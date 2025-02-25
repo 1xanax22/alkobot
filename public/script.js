@@ -31,16 +31,22 @@ const userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 'anonymous';
 // Хранение данных
 let startTime = localStorage.getItem(`startTime_${userId}`) || null;
 let friends = JSON.parse(localStorage.getItem(`friends_${userId}`)) || [];
+let timerInterval = null; // Переменная для хранения интервала
 
 function updateTimer() {
-    if (!startTime) return;
+    if (!startTime) {
+        timerDisplay.innerText = 'Нажми "Старт"!';
+        timerDisplay.classList.remove('active');
+        return;
+    }
     const now = new Date();
     const start = new Date(startTime);
     const diff = now - start;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    timerDisplay.innerText = `${days} дней, ${hours} часов, ${minutes} минут`;
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    timerDisplay.innerText = `${days} дней, ${hours} часов, ${minutes} минут, ${seconds} секунд`;
     timerDisplay.classList.add('active');
 
     // Сохраняем в Firebase
@@ -50,11 +56,16 @@ function updateTimer() {
     });
 }
 
+function startTimerInterval() {
+    if (timerInterval) clearInterval(timerInterval); // Очищаем старый интервал
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+}
+
 if (startTime) {
     startBtn.style.display = 'none';
     resetBtn.style.display = 'inline';
-    setInterval(updateTimer, 1000);
-    updateTimer();
+    startTimerInterval();
 }
 
 startBtn.addEventListener('click', () => {
@@ -62,12 +73,13 @@ startBtn.addEventListener('click', () => {
     localStorage.setItem(`startTime_${userId}`, startTime);
     startBtn.style.display = 'none';
     resetBtn.style.display = 'inline';
-    setInterval(updateTimer, 1000);
-    updateTimer();
+    startTimerInterval();
 });
 
 resetBtn.addEventListener('click', () => {
     startTime = null;
+    clearInterval(timerInterval);
+    timerInterval = null;
     localStorage.removeItem(`startTime_${userId}`);
     timerDisplay.innerText = 'Нажми "Старт"!';
     timerDisplay.classList.remove('active');
@@ -99,7 +111,8 @@ function calculateTime(startTimeISO) {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    return `${days} дней, ${hours} часов, ${minutes} минут`;
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    return `${days} дней, ${hours} часов, ${minutes} минут, ${seconds} секунд`;
 }
 
 addFriendBtn.addEventListener('click', async () => {
@@ -112,6 +125,13 @@ addFriendBtn.addEventListener('click', async () => {
         const data = await response.json();
         if (data.ok) {
             const friendId = data.result.id;
+            // Проверяем, зарегистрирован ли друг в Firebase
+            const friendRef = database.ref(`users/${friendId}`);
+            const snapshot = await friendRef.once('value');
+            if (!snapshot.exists()) {
+                alert('Друг не зарегистрирован! Пусть он откроет приложение и начнёт таймер.');
+                return;
+            }
             if (!friends.some(f => f.id === friendId)) {
                 friends.push({ id: friendId, username: `@${username}` });
                 localStorage.setItem(`friends_${userId}`, JSON.stringify(friends));
