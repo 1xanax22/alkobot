@@ -1,123 +1,135 @@
-// Инициализация Telegram WebApp с отладкой
-try {
-    const tg = window.Telegram.WebApp;
-    if (!tg) {
-        console.error('Telegram WebApp не инициализирован');
-        throw new Error('Telegram WebApp не найден');
-    }
-    tg.ready();
-    tg.expand(); // Открываем мини-приложение на весь экран
-    console.log('Telegram WebApp инициализирован успешно');
-} catch (error) {
-    console.error('Ошибка инициализации Telegram WebApp:', error);
-}
+// Инициализация Telegram Web App
+const tg = window.Telegram.WebApp;
+tg.ready();
 
-// Получаем элементы DOM
+// Инициализация Firebase
+const firebaseConfig = {
+    // Вставь свои данные Firebase (нужно зарегистрировать проект)
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Элементы DOM
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('startBtn');
 const resetBtn = document.getElementById('resetBtn');
-const friendIdInput = document.getElementById('friendId');
+const friendUsernameInput = document.getElementById('friendUsername');
 const addFriendBtn = document.getElementById('addFriendBtn');
 const friendsList = document.getElementById('friendsList');
 
-// Загружаем данные из локального хранилища
-let startTime = localStorage.getItem('startTime');
-let friends = JSON.parse(localStorage.getItem('friends')) || [];
+// Получение ID пользователя из Telegram
+const userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 'anonymous';
 
-// Функция обновления таймера
+// Хранение данных
+let startTime = localStorage.getItem(`startTime_${userId}`) || null;
+let friends = JSON.parse(localStorage.getItem(`friends_${userId}`)) || [];
+
 function updateTimer() {
-    if (!startTime) {
-        timerDisplay.innerText = 'Нажми "Старт", чтобы начать!';
-        timerDisplay.classList.remove('active');
-        startBtn.style.display = 'block';
-        resetBtn.style.display = 'none';
-        return;
-    }
-
+    if (!startTime) return;
     const now = new Date();
     const start = new Date(startTime);
     const diff = now - start;
-
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
     timerDisplay.innerText = `${days} дней, ${hours} часов, ${minutes} минут`;
     timerDisplay.classList.add('active');
-    startBtn.style.display = 'none';
-    resetBtn.style.display = 'block';
+
+    // Сохраняем в Firebase
+    database.ref(`users/${userId}`).set({
+        startTime: startTime,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    });
 }
 
-// Инициализация таймера, если он уже запущен
 if (startTime) {
     startBtn.style.display = 'none';
-    resetBtn.style.display = 'block';
+    resetBtn.style.display = 'inline';
     setInterval(updateTimer, 1000);
-    updateTimer();
-} else {
-    startBtn.style.display = 'block';
-    resetBtn.style.display = 'none';
     updateTimer();
 }
 
-// Обработчик кнопки "Старт"
 startBtn.addEventListener('click', () => {
     startTime = new Date().toISOString();
-    localStorage.setItem('startTime', startTime);
-
-    // Добавляем анимацию нажатия на кнопку
-    startBtn.classList.add('start-animation');
-    setTimeout(() => {
-        startBtn.classList.remove('start-animation');
-    }, 500); // Убираем анимацию через 0.5 секунды
-
-    updateTimer();
+    localStorage.setItem(`startTime_${userId}`, startTime);
+    startBtn.style.display = 'none';
+    resetBtn.style.display = 'inline';
     setInterval(updateTimer, 1000);
-    console.log('Таймер запущен');
+    updateTimer();
 });
 
-// Обработчик кнопки "Сброс"
 resetBtn.addEventListener('click', () => {
     startTime = null;
-    localStorage.removeItem('startTime');
-    timerDisplay.innerText = 'Нажми "Старт", чтобы начать!';
+    localStorage.removeItem(`startTime_${userId}`);
+    timerDisplay.innerText = 'Нажми "Старт"!';
     timerDisplay.classList.remove('active');
-    startBtn.style.display = 'block';
+    startBtn.style.display = 'inline';
     resetBtn.style.display = 'none';
 
-    // Добавляем анимацию нажатия на кнопку "Сброс"
-    resetBtn.classList.add('start-animation');
-    setTimeout(() => {
-        resetBtn.classList.remove('start-animation');
-    }, 500); // Убираем анимацию через 0.5 секунды
-    console.log('Таймер сброшен');
+    // Удаляем данные из Firebase
+    database.ref(`users/${userId}`).remove();
 });
 
-// Функция отображения списка друзей
 function renderFriends() {
     friendsList.innerHTML = '';
     friends.forEach(friend => {
-        const li = document.createElement('li');
-        li.innerText = `Друг ${friend.id}: ${friend.time || 'не начал'}`;
-        friendsList.appendChild(li);
+        const friendRef = database.ref(`users/${friend.id}`);
+        friendRef.on('value', (snapshot) => {
+            const friendData = snapshot.val();
+            const li = document.createElement('li');
+            li.innerText = `${friend.username || `Друг ${friend.id}`}: ${friendData?.startTime ? calculateTime(friendData.startTime) : 'не начал'}`;
+            friendsList.appendChild(li);
+        });
     });
 }
 renderFriends();
 
-// Обработчик добавления друга
-addFriendBtn.addEventListener('click', () => {
-    const friendId = friendIdInput.value.trim();
-    if (friendId && !friends.some(f => f.id === friendId)) {
-        friends.push({ id: friendId, time: null });
-        localStorage.setItem('friends', JSON.stringify(friends));
-        renderFriends();
-        friendIdInput.value = '';
-    } else {
-        alert('Введите корректный ID друга или убедитесь, что он не добавлен!');
+function calculateTime(startTimeISO) {
+    const start = new Date(startTimeISO);
+    const now = new Date();
+    const diff = now - start;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    return `${days} дней, ${hours} часов, ${minutes} минут`;
+}
+
+addFriendBtn.addEventListener('click', async () => {
+    const username = friendUsernameInput.value.trim().replace('@', '');
+    if (!username) return;
+
+    try {
+        // Получаем ID по никнейму через Telegram API
+        const response = await fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/getChat?chat_id=@${username}`);
+        const data = await response.json();
+        if (data.ok) {
+            const friendId = data.result.id;
+            if (!friends.some(f => f.id === friendId)) {
+                friends.push({ id: friendId, username: `@${username}` });
+                localStorage.setItem(`friends_${userId}`, JSON.stringify(friends));
+                renderFriends();
+                friendUsernameInput.value = '';
+            }
+        } else {
+            alert('Пользователь не найден или ник неверный!');
+        }
+    } catch (error) {
+        alert('Ошибка при добавлении друга. Проверь ник и попробуй ещё раз.');
+        console.error(error);
     }
 });
 
-// Обработчик изменения размера окна (опционально)
-tg.onEvent('viewportChanged', () => {
-    console.log('Размер окна изменился:', tg.viewportStableHeight, tg.viewportHeight);
+// Анимация появления друзей
+friendsList.addEventListener('animationend', (e) => {
+    if (e.animationName === 'fadeIn') {
+        e.target.style.opacity = 1;
+    }
 });
