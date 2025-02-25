@@ -44,21 +44,21 @@ body {
 }
 
 #startBtn {
-    padding: 15px 30px; /* Увеличиваем размер кнопки */
-    margin: 20px 0; /* Отступ сверху и снизу */
+    padding: 15px 30px;
+    margin: 20px 0;
     background-color: #4CAF50; /* Зелёный цвет кнопки */
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-size: 18px;
-    position: relative; /* Для позиционирования */
-    transform: translateY(-50%); /* Смещаем кнопку чуть выше центра */
+    position: relative;
+    transform: translateY(-50%);
     top: 40%; /* Позиция чуть выше центра (регулируйте для точной настройки) */
 }
 
 #startBtn:hover {
-    background-color: #45a049; /* Тёмно-зелёный при наведении */
+    background-color: #45a049;
 }
 
 #startBtn.start-animation {
