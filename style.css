@@ -20,7 +20,7 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Располагаем элементы сверху */
+    justify-content: flex-start;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
@@ -52,9 +52,9 @@ body {
     border-radius: 10px;
     cursor: pointer;
     font-size: 18px;
-    position: relative; /* Для позиционирования анимации */
+    position: relative; /* Для позиционирования */
     transform: translateY(-50%); /* Смещаем кнопку чуть выше центра */
-    top: 40%; /* Позиция чуть выше центра (можно регулировать) */
+    top: 40%; /* Позиция чуть выше центра (регулируйте для точной настройки) */
 }
 
 #startBtn:hover {
