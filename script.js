@@ -1,6 +1,10 @@
 const tg = window.Telegram.WebApp;
 tg.ready();
 
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand(); // Принудительно расширяет мини-приложение на весь экран
+
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('startBtn');
 const resetBtn = document.getElementById('resetBtn');
