@@ -1,59 +1,123 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #000000; /* Чёрный фон для всего приложения */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    overflow: hidden;
 }
+
 .container {
     text-align: center;
-    background: white;
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Располагаем элементы сверху */
+    align-items: center;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }
-h1 {
-    color: #333;
-}
+
 .timer {
     font-size: 24px;
     margin: 20px 0;
     padding: 10px;
     border-radius: 5px;
-    background-color: #e9ecef;
-    transition: all 0.3s ease; /* Плавная анимация фона */
+    background-color: #333333; /* Тёмный фон для таймера */
+    color: white; /* Белый текст для контраста */
+    transition: all 0.3s ease;
+    width: 90%;
+    max-width: 400px;
 }
+
 .timer.active {
-    background-color: #d4edda; /* Зеленый фон, когда таймер идет */
-    animation: pulse 2s infinite; /* Пульсация */
+    background-color: #4CAF50; /* Зелёный фон, когда таймер идёт */
+    animation: pulse 2s infinite;
 }
-button {
+
+#startBtn {
+    padding: 15px 30px; /* Увеличиваем размер кнопки */
+    margin: 20px 0; /* Отступ сверху и снизу */
+    background-color: #4CAF50; /* Зелёный цвет кнопки */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative; /* Для позиционирования анимации */
+    transform: translateY(-50%); /* Смещаем кнопку чуть выше центра */
+    top: 40%; /* Позиция чуть выше центра (можно регулировать) */
+}
+
+#startBtn:hover {
+    background-color: #45a049; /* Тёмно-зелёный при наведении */
+}
+
+#startBtn.start-animation {
+    animation: buttonPress 0.5s ease-out;
+}
+
+@keyframes buttonPress {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(0.9); }
+    100% { transform: translateY(-50%) scale(1); }
+}
+
+.friends-section {
+    margin-top: 20px;
+    color: white; /* Белый текст для контраста */
+    width: 90%;
+    max-width: 400px;
+}
+
+.friends-section h2 {
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #222;
+    color: white;
+}
+
+button#addFriendBtn {
     padding: 10px 20px;
-    margin: 5px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
-button:hover {
+
+button#addFriendBtn:hover {
     background-color: #0056b3;
 }
-input {
-    padding: 5px;
-    margin: 10px 0;
-}
+
 ul {
     list-style: none;
     padding: 0;
-}
-li {
-    margin: 5px 0;
+    margin: 0;
 }
 
-/* Анимация пульсации */
+li {
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #222;
+    border-radius: 5px;
+}
+
+/* Анимация пульсации для таймера */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.02); }

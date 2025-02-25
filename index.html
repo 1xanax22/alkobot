@@ -9,15 +9,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Я не пью</h1>
-        <div id="timer">Нажми "Старт", чтобы начать!</div>
+        <div class="timer" id="timer">Нажми "Старт", чтобы начать!</div>
         <button id="startBtn">Старт</button>
-        <button id="resetBtn" style="display: none;">Сбросить</button>
-
-        <h2>Мои друзья</h2>
-        <ul id="friendsList"></ul>
-        <input type="text" id="friendId" placeholder="Telegram ID друга">
-        <button id="addFriendBtn">Добавить друга</button>
+        <div class="friends-section">
+            <h2>Мои друзья</h2>
+            <ul id="friendsList"></ul>
+            <input type="text" id="friendId" placeholder="Telegram ID друга">
+            <button id="addFriendBtn">Добавить друга</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
