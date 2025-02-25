@@ -1,7 +1,11 @@
 // Инициализация Telegram WebApp и запрос на полноэкранный режим
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand(); // Открываем мини-приложение на весь экран
+try {
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand(); // Открываем мини-приложение на весь экран
+} catch (error) {
+    console.error('Ошибка инициализации Telegram WebApp:', error);
+}
 
 // Получаем элементы DOM
 const timerDisplay = document.getElementById('timer');
@@ -48,6 +52,7 @@ if (startTime) {
 } else {
     startBtn.style.display = 'block';
     resetBtn.style.display = 'none';
+    updateTimer();
 }
 
 // Обработчик кнопки "Старт"
