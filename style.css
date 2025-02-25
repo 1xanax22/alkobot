@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif !important;
-    background-color: #000000 !important; 
+    background-color: #000000 !important; /* Чёрный фон с принудительным применением */
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
