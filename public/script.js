@@ -4,7 +4,10 @@ tg.ready();
 
 // Загружаем конфигурацию Firebase через API Vercel
 fetch('/api/firebase')
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Ошибка загрузки конфигурации Firebase');
+        return response.json();
+    })
     .then(firebaseConfig => {
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -45,7 +48,7 @@ fetch('/api/firebase')
             database.ref(`users/${userId}`).set({
                 startTime: startTime,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
-            });
+            }).catch(error => console.error("Ошибка сохранения в Firebase:", error));
         }
 
         function startTimerInterval() {
@@ -79,7 +82,7 @@ fetch('/api/firebase')
             resetBtn.style.display = 'none';
 
             // Удаляем данные из Firebase
-            database.ref(`users/${userId}`).remove();
+            database.ref(`users/${userId}`).remove().catch(error => console.error("Ошибка удаления из Firebase:", error));
         });
 
         function renderFriends() {
@@ -91,7 +94,7 @@ fetch('/api/firebase')
                     const li = document.createElement('li');
                     li.innerText = `${friend.username || `Друг ${friend.id}`}: ${friendData?.startTime ? calculateTime(friendData.startTime) : 'не начал'}`;
                     friendsList.appendChild(li);
-                });
+                }, (error) => console.error("Ошибка загрузки данных друга:", error));
             });
         }
         renderFriends();
@@ -146,4 +149,7 @@ fetch('/api/firebase')
             }
         });
     })
-    .catch(error => console.error("Ошибка загрузки конфигурации Firebase:", error));
+    .catch(error => {
+        console.error("Ошибка загрузки конфигурации Firebase:", error);
+        alert('Не удалось подключиться к Firebase. Проверь настройки сервера.');
+    });
