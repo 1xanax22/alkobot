@@ -1,62 +1,62 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif !important;
     background-color: #000000 !important; /* Чёрный фон с принудительным применением */
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important;
 }
 
 .container {
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
+    text-align: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 600px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
     color: white !important; /* Белый текст для контраста с чёрным фоном */
     background: none !important; /* Убедимся, что фон контейнера не переопределяется */
 }
 
 .timer {
-    font-size: 24px;
-    margin: 20px 0;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #333333;
-    color: white;
-    transition: all 0.3s ease;
-    width: 90%;
-    max-width: 400px;
+    font-size: 24px !important;
+    margin: 20px 0 !important;
+    padding: 10px !important;
+    border-radius: 5px !important;
+    background-color: #333333 !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+    width: 90% !important;
+    max-width: 400px !important;
 }
 
 .timer.active {
-    background-color: #4CAF50;
-    animation: pulse 2s infinite;
+    background-color: #4CAF50 !important;
+    animation: pulse 2s infinite !important;
 }
 
 #startBtn, #resetBtn {
-    padding: 15px 30px;
-    margin: 10px 0;
+    padding: 15px 30px !important;
+    margin: 10px 0 !important;
     background-color: #4CAF50 !important; /* Зелёный цвет для обеих кнопок с принудительным применением */
     color: white !important;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    position: relative;
-    transform: translateY(-50%);
-    top: 40%; /* Позиция чуть выше центра (регулируйте для точной настройки) */
+    border: none !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    font-size: 18px !important;
+    position: relative !important;
+    transform: translateY(-50%) !important;
+    top: 40% !important; /* Позиция чуть выше центра (регулируйте для точной настройки) */
 }
 
 #startBtn:hover, #resetBtn:hover {
@@ -64,65 +64,65 @@ body {
 }
 
 #startBtn.start-animation, #resetBtn.start-animation {
-    animation: buttonPress 0.5s ease-out;
+    animation: buttonPress 0.5s ease-out !important;
 }
 
 @keyframes buttonPress {
-    0% { transform: translateY(-50%) scale(1); }
-    50% { transform: translateY(-50%) scale(0.9); }
-    100% { transform: translateY(-50%) scale(1); }
+    0% { transform: translateY(-50%) scale(1) !important; }
+    50% { transform: translateY(-50%) scale(0.9) !important; }
+    100% { transform: translateY(-50%) scale(1) !important; }
 }
 
 .friends-section {
-    margin-top: 20px;
-    width: 90%;
-    max-width: 400px;
+    margin-top: 20px !important;
+    width: 90% !important;
+    max-width: 400px !important;
     color: white !important; /* Белый текст для контраста */
 }
 
 .friends-section h2 {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 input {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #222;
-    color: white;
+    padding: 10px !important;
+    margin: 10px 0 !important;
+    border-radius: 5px !important;
+    border: 1px solid #555 !important;
+    background-color: #222 !important;
+    color: white !important;
 }
 
 button#addFriendBtn {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 10px 20px !important;
+    background-color: #007bff !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
 }
 
 button#addFriendBtn:hover {
-    background-color: #0056b3;
+    background-color: #0056b3 !important;
 }
 
 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 li {
-    margin: 5px 0;
-    padding: 5px;
-    background-color: #222;
-    border-radius: 5px;
-    color: white; /* Белый текст для списка друзей */
+    margin: 5px 0 !important;
+    padding: 5px !important;
+    background-color: #222 !important;
+    border-radius: 5px !important;
+    color: white !important; /* Белый текст для списка друзей */
 }
 
 /* Анимация пульсации для таймера */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
+    0% { transform: scale(1) !important; }
+    50% { transform: scale(1.02) !important; }
+    100% { transform: scale(1) !important; }
 }

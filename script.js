@@ -1,8 +1,13 @@
-// Инициализация Telegram WebApp и запрос на полноэкранный режим
+// Инициализация Telegram WebApp с отладкой
 try {
     const tg = window.Telegram.WebApp;
+    if (!tg) {
+        console.error('Telegram WebApp не инициализирован');
+        throw new Error('Telegram WebApp не найден');
+    }
     tg.ready();
     tg.expand(); // Открываем мини-приложение на весь экран
+    console.log('Telegram WebApp инициализирован успешно');
 } catch (error) {
     console.error('Ошибка инициализации Telegram WebApp:', error);
 }
@@ -68,6 +73,7 @@ startBtn.addEventListener('click', () => {
 
     updateTimer();
     setInterval(updateTimer, 1000);
+    console.log('Таймер запущен');
 });
 
 // Обработчик кнопки "Сброс"
@@ -84,6 +90,7 @@ resetBtn.addEventListener('click', () => {
     setTimeout(() => {
         resetBtn.classList.remove('start-animation');
     }, 500); // Убираем анимацию через 0.5 секунды
+    console.log('Таймер сброшен');
 });
 
 // Функция отображения списка друзей
