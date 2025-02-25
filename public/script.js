@@ -118,7 +118,7 @@ fetch('/api/firebase')
 
             try {
                 // Получаем ID по никнейму через Telegram API
-                const response = await fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/getChat?chat_id=@${username}`);
+                const response = await fetch(`https://api.telegram.org/bot8028462394:AAEL-0ePwSJ1_aGH6neNoZoVZ9B0yiLnY_Q/getChat?chat_id=@${username}`);
                 const data = await response.json();
                 if (data.ok) {
                     const friendId = data.result.id;
