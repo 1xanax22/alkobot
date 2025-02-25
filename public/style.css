@@ -1,128 +1,100 @@
 body {
-    font-family: Arial, sans-serif !important;
-    background-color: #000000 !important; /* Чёрный фон с принудительным применением */
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    overflow: hidden !important;
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: white;
 }
 
 .container {
-    text-align: center !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 600px !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    padding: 20px !important;
-    box-sizing: border-box !important;
-    color: white !important; /* Белый текст для контраста с чёрным фоном */
-    background: none !important; /* Убедимся, что фон контейнера не переопределяется */
+    text-align: center;
+    background: #2d2d2d;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.5s ease-in;
+}
+
+h1 {
+    color: #00ff00;
+    margin-bottom: 20px;
+    font-size: 28px;
 }
 
 .timer {
-    font-size: 24px !important;
-    margin: 20px 0 !important;
-    padding: 10px !important;
-    border-radius: 5px !important;
-    background-color: #333333 !important;
-    color: white !important;
-    transition: all 0.3s ease !important;
-    width: 90% !important;
-    max-width: 400px !important;
+    font-size: 24px;
+    margin: 15px 0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #3a3a3a;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .timer.active {
-    background-color: #4CAF50 !important;
-    animation: pulse 2s infinite !important;
+    background-color: #004d00;
+    animation: pulse 2s infinite;
 }
 
-#startBtn, #resetBtn {
-    padding: 15px 30px !important;
-    margin: 10px 0 !important;
-    background-color: #4CAF50 !important; /* Зелёный цвет для обеих кнопок с принудительным применением */
-    color: white !important;
-    border: none !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    font-size: 18px !important;
-    position: relative !important;
-    transform: translateY(-50%) !important;
-    top: 40% !important; /* Позиция чуть выше центра (регулируйте для точной настройки) */
+button {
+    padding: 12px 24px;
+    margin: 5px;
+    background-color: #00ff00;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-#startBtn:hover, #resetBtn:hover {
-    background-color: #45a049 !important;
-}
-
-#startBtn.start-animation, #resetBtn.start-animation {
-    animation: buttonPress 0.5s ease-out !important;
-}
-
-@keyframes buttonPress {
-    0% { transform: translateY(-50%) scale(1) !important; }
-    50% { transform: translateY(-50%) scale(0.9) !important; }
-    100% { transform: translateY(-50%) scale(1) !important; }
-}
-
-.friends-section {
-    margin-top: 20px !important;
-    width: 90% !important;
-    max-width: 400px !important;
-    color: white !important; /* Белый текст для контраста */
-}
-
-.friends-section h2 {
-    margin-bottom: 10px !important;
+button:hover {
+    background-color: #00cc00;
+    transform: scale(1.05);
 }
 
 input {
-    padding: 10px !important;
-    margin: 10px 0 !important;
-    border-radius: 5px !important;
-    border: 1px solid #555 !important;
-    background-color: #222 !important;
-    color: white !important;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #555;
+    background-color: #3a3a3a;
+    color: white;
+    transition: border-color 0.3s ease;
 }
 
-button#addFriendBtn {
-    padding: 10px 20px !important;
-    background-color: #007bff !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-}
-
-button#addFriendBtn:hover {
-    background-color: #0056b3 !important;
+input:focus {
+    border-color: #00ff00;
+    outline: none;
 }
 
 ul {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
 }
 
 li {
-    margin: 5px 0 !important;
-    padding: 5px !important;
-    background-color: #222 !important;
-    border-radius: 5px !important;
-    color: white !important; /* Белый текст для списка друзей */
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
 }
 
-/* Анимация пульсации для таймера */
+li:hover {
+    background-color: #444;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes pulse {
-    0% { transform: scale(1) !important; }
-    50% { transform: scale(1.02) !important; }
-    100% { transform: scale(1) !important; }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
