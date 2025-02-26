@@ -1,100 +1,88 @@
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
     background-color: #1a1a1a;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
-    color: white;
+    overflow: hidden;
 }
 
 .container {
     text-align: center;
-    background: #2d2d2d;
+    background-color: #2d2d2d;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    animation: fadeIn 0.5s ease-in;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
-    color: #00ff00;
-    margin-bottom: 20px;
-    font-size: 28px;
+    margin: 0;
+    font-size: 2.5em;
+    color: #00cc00;
 }
 
 .timer {
-    font-size: 24px;
-    margin: 15px 0;
-    padding: 10px 20px;
+    font-size: 1.5em;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #333333;
     border-radius: 10px;
-    background-color: #3a3a3a;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Статичное мягкое свечение */
+    box-shadow: 0 0 10px rgba(0, 204, 0, 0.3), 0 0 20px rgba(0, 204, 0, 0.2);
+    transition: none; /* Убираем анимацию пульсации */
 }
 
 .timer.active {
-    background-color: #004d00;
-    animation: pulse 2s infinite;
+    color: #ffffff;
 }
 
 button {
     padding: 12px 24px;
     margin: 5px;
-    background-color: #00ff00;
+    background-color: #00cc00;
     color: #1a1a1a;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1em;
 }
 
 button:hover {
-    background-color: #00cc00;
+    background-color: #009900;
     transform: scale(1.05);
+}
+
+button:active {
+    background-color: #007700;
 }
 
 input {
     padding: 10px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: 1px solid #555;
-    background-color: #3a3a3a;
-    color: white;
-    transition: border-color 0.3s ease;
-}
-
-input:focus {
-    border-color: #00ff00;
-    outline: none;
+    margin: 5px;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    background-color: #333333;
+    color: #ffffff;
 }
 
 ul {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
-    margin: 15px 0;
 }
 
 li {
-    margin: 10px 0;
+    margin: 5px 0;
     padding: 10px;
-    background-color: #3a3a3a;
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
+    background-color: #3d3d3d;
+    border-radius: 5px;
+    animation: fadeIn 1s ease-in;
 }
 
-li:hover {
-    background-color: #444;
-}
-
-/* Анимации */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
