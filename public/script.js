@@ -137,91 +137,13 @@ fetch('/api/firebase')
         // Исправленная функция добавления друзей
         addFriendBtn.addEventListener('click', async () => {
             let username = friendUsernameInput.value.trim();
-            // Удаляем @, если оно есть, и добавляем, если отсутствует
             if (username.startsWith('@')) {
                 username = username.slice(1); // Убираем @, если есть
             }
             if (!username) return;
 
             try {
-                // Получаем ID по никнейму через Telegram API
                 const response = await fetch(`https://api.telegram.org/bot${botToken}/getChat?chat_id=@${username}`);
                 const data = await response.json();
                 if (data.ok) {
-                    const friendId = data.result.id;
-                    // Проверяем, зарегистрирован ли друг в Firebase
-                    const friendRef = database.ref(`users/${friendId}`);
-                    const snapshot = await new Promise(resolve => friendRef.on('value', resolve));
-                    if (!snapshot.exists()) {
-                        alert('Друг не зарегистрирован! Пусть он откроет приложение и начнёт таймер.');
-                        return;
-                    }
-                    if (!friends.some(f => f.id === friendId)) {
-                        friends.push({ id: friendId, username: `@${username}` });
-                        localStorage.setItem(`friends_${userId}`, JSON.stringify(friends));
-                        renderFriends();
-                        friendUsernameInput.value = '';
-                    } else {
-                        alert('Этот друг уже добавлен!');
-                    }
-                } else {
-                    alert('Пользователь не найден или ник неверный!');
-                }
-            } catch (error) {
-                alert('Ошибка при добавлении друга. Проверь ник и попробуй ещё раз.');
-                console.error(error);
-            }
-        });
-
-        // Навигация между экранами
-        navHome.addEventListener('click', () => {
-            homeScreen.classList.add('active');
-            statsScreen.classList.remove('active');
-            navHome.classList.add('active');
-            navStats.classList.remove('active');
-        });
-
-        navStats.addEventListener('click', () => {
-            statsScreen.classList.add('active');
-            homeScreen.classList.remove('active');
-            navStats.classList.add('active');
-            navHome.classList.remove('active');
-            updateStats();
-        });
-
-        // Функция обновления статистики
-        function updateStats() {
-            const friendCountValue = friends.length;
-            friendCount.textContent = friendCountValue;
-
-            let totalSeconds = 0;
-            friends.forEach(friend => {
-                const friendRef = database.ref(`users/${friend.id}`);
-                friendRef.on('value', (snapshot) => {
-                    const friendData = snapshot.val();
-                    if (friendData?.startTime) {
-                        const start = new Date(friendData.startTime);
-                        const now = new Date();
-                        const diff = Math.max(0, now - start);
-                        totalSeconds += diff / 1000; // Суммируем в секундах
-                    }
-                });
-            });
-            const days = Math.floor(totalSeconds / (3600 * 24));
-            const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = Math.floor(totalSeconds % 60);
-            totalSoberTime.textContent = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
-        }
-
-        // Анимация появления друзей
-        friendsList.addEventListener('animationend', (e) => {
-            if (e.animationName === 'fadeIn') {
-                e.target.style.opacity = 1;
-            }
-        });
-    })
-    .catch(error => {
-        console.error("Ошибка загрузки конфигурации Firebase:", error);
-        alert('Не удалось подключиться к Firebase. Проверь настройки сервера.');
-    });
+                    const friendId = data.result
