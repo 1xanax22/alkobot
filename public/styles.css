@@ -113,32 +113,32 @@ li {
     display: flex;
     justify-content: space-around;
     background-color: #2d2d2d;
-    padding: 12px 0; /* Немного уменьшен padding для компактности */
+    padding: 15px 0; /* Увеличен padding для большей высоты */
     border-top: 1px solid #444444;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 65px; /* Немного уменьшена высота */
+    height: 80px; /* Увеличена высота для iPhone */
 }
 
 .nav-btn {
     flex: 1;
-    padding: 12px 18px; /* Уменьшен внутренний отступ для компактности */
+    padding: 15px 18px; /* Сохранён внутренний отступ, но адаптирован под новую высоту */
     background-color: #333333; /* Серый фон для неактивных кнопок */
     color: #ffffff;
     border: none;
-    border-radius: 15px; /* Увеличены закругления для эргономики на iPhone */
+    border-radius: 15px; /* Сохранены закругления */
     cursor: pointer;
-    margin: 0 8px; /* Уменьшен margin */
-    font-size: 1em; /* Оставлен размер шрифта */
+    margin: 0 8px; /* Сохранён margin */
+    font-size: 1em; /* Сохранён размер шрифта */
     transition: background-color 0.3s ease, transform 0.2s ease;
     height: 100%; /* Занимает всю высоту панели */
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Roboto', sans-serif; /* Новый шрифт */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Лёгкая тень для 3D-эффекта */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Лёгкая тень */
 }
 
 .nav-btn.active {
