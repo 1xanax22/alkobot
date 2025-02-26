@@ -35,6 +35,7 @@ fetch('/api/firebase')
         const resetBtn = document.getElementById('resetBtn');
         const friendUsernameInput = document.getElementById('friendUsername');
         const addFriendBtn = document.getElementById('addFriendBtn');
+        const inviteFriendBtn = document.getElementById('inviteFriendBtn');
         const friendsList = document.getElementById('friendsList');
         const homeScreen = document.getElementById('homeScreen');
         const statsScreen = document.getElementById('statsScreen');
@@ -125,7 +126,7 @@ fetch('/api/firebase')
             const now = new Date();
             const diff = Math.max(0, now - start);
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24) / (1000 * 60 * 60)));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             return `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
@@ -139,6 +140,7 @@ fetch('/api/firebase')
             try {
                 const response = await fetch(`https://api.telegram.org/bot${botToken}/getChat?chat_id=@${username}`);
                 const data = await response.json();
+                console.log('API Response:', data); // Отладка ответа API
                 if (data.ok) {
                     const friendId = data.result.id;
                     const friendRef = database.ref(`users/${friendId}`);
@@ -156,12 +158,20 @@ fetch('/api/firebase')
                         alert('Этот друг уже добавлен!');
                     }
                 } else {
-                    alert('Пользователь не найден или ник неверный!');
+                    alert(`Пользователь не найден или ник неверный! Ошибка: ${data.description}. Попробуйте пригласить друга по ссылке.`);
                 }
             } catch (error) {
                 alert('Ошибка при добавлении друга. Проверь ник и попробуй ещё раз.');
-                console.error(error);
+                console.error('Fetch Error:', error);
             }
+        });
+
+        // Функция генерации ссылки приглашения
+        inviteFriendBtn.addEventListener('click', () => {
+            const botUsername = 'YourBotName'; // Замени на имя твоего бота (например, 'AlkoBot')
+            const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
+            alert(`Отправьте эту ссылку другу для приглашения:\n${inviteLink}\nПосле активации бота добавьте друга заново.`);
+            console.log('Invite Link Generated:', inviteLink);
         });
 
         function handleNavigation(btn, screen) {
@@ -192,25 +202,4 @@ fetch('/api/firebase')
                 friendRef.on('value', (snapshot) => {
                     const friendData = snapshot.val();
                     if (friendData?.startTime) {
-                        const start = new Date(friendData.startTime);
-                        const now = new Date();
-                        const diff = Math.max(0, now - start);
-                        totalSeconds += diff / 1000;
-                    }
-                });
-            });
-            const days = Math.floor(totalSeconds / (3600 * 24));
-            const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = Math.floor(totalSeconds % 60);
-            totalSoberTime.textContent = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
-        }
-
-        friendsList.addEventListener('animationend', (e) => {
-            if (e.animationName === 'fadeIn') e.target.style.opacity = 1;
-        });
-    })
-    .catch(error => {
-        console.error("Ошибка загрузки конфигурации Firebase:", error);
-        alert('Не удалось подключиться к Firebase. Проверь настройки сервера.');
-    });
+                        const start = new Date(friendData
