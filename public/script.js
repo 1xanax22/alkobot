@@ -126,7 +126,7 @@ fetch('/api/firebase')
             const now = new Date();
             const diff = Math.max(0, now - start);
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24) / (1000 * 60 * 60)));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             return `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
@@ -158,7 +158,7 @@ fetch('/api/firebase')
                         alert('Этот друг уже добавлен!');
                     }
                 } else {
-                    alert(`Пользователь не найден или ник неверный! Ошибка: ${data.description}. Попробуйте пригласить друга по ссылке.`);
+                    alert(`Пользователь не найден или ник неверный! Ошибка: ${data.description}. Попробуйте пригласить друга.`);
                 }
             } catch (error) {
                 alert('Ошибка при добавлении друга. Проверь ник и попробуй ещё раз.');
@@ -166,12 +166,28 @@ fetch('/api/firebase')
             }
         });
 
-        // Функция генерации ссылки приглашения
+        // Функция отправки приглашения через Telegram Web App
         inviteFriendBtn.addEventListener('click', () => {
-            const botUsername = 'YourBotName'; // Замени на имя твоего бота (например, 'AlkoBot')
+            const botUsername = 'AlkoBot01'; // Твоё имя бота
             const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
-            alert(`Отправьте эту ссылку другу для приглашения:\n${inviteLink}\nПосле активации бота добавьте друга заново.`);
-            console.log('Invite Link Generated:', inviteLink);
+            const message = {
+                text: `Приглашение от друга!\nЯ завершил задание в приложении "Я не пью!" — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к награде!\n${inviteLink}`,
+                // Можно добавить изображение, как на скриншоте, но это требует URL картинки
+                // Например: "https://example.com/invite-image.jpg"
+            };
+            tg.showPopup({
+                message: 'Отправить приглашение?',
+                buttons: [
+                    { id: 'cancel', type: 'cancel' },
+                    { id: 'send', type: 'default', text: 'Отправить' }
+                ]
+            }, (btnId) => {
+                if (btnId === 'send') {
+                    tg.sendData(JSON.stringify(message)); // Отправка сообщения
+                    console.log('Invite sent with link:', inviteLink);
+                    alert('Приглашение отправлено! Друг должен открыть ссылку и начать таймер.');
+                }
+            });
         });
 
         function handleNavigation(btn, screen) {
