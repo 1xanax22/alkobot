@@ -36,6 +36,12 @@ fetch('/api/firebase')
         const friendUsernameInput = document.getElementById('friendUsername');
         const addFriendBtn = document.getElementById('addFriendBtn');
         const friendsList = document.getElementById('friendsList');
+        const homeScreen = document.getElementById('homeScreen');
+        const statsScreen = document.getElementById('statsScreen');
+        const navHome = document.getElementById('navHome');
+        const navStats = document.getElementById('navStats');
+        const friendCount = document.getElementById('friendCount');
+        const totalSoberTime = document.getElementById('totalSoberTime');
 
         // Получение ID пользователя из Telegram
         const userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 'anonymous';
@@ -43,7 +49,7 @@ fetch('/api/firebase')
         // Хранение данных
         let startTime = localStorage.getItem(`startTime_${userId}`) || null;
         let friends = JSON.parse(localStorage.getItem(`friends_${userId}`)) || [];
-        let timerInterval = null; // Переменная для хранения интервала (теперь не используется)
+        let timerInterval = null; // Не используется для статичного таймера
 
         // Функция обновления статичного таймера
         function updateTimer() {
@@ -128,7 +134,7 @@ fetch('/api/firebase')
             return `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
         }
 
-        // Исправленная функция добавления друзей с поддержкой @ и без
+        // Исправленная функция добавления друзей
         addFriendBtn.addEventListener('click', async () => {
             let username = friendUsernameInput.value.trim();
             // Удаляем @, если оно есть, и добавляем, если отсутствует
@@ -166,6 +172,47 @@ fetch('/api/firebase')
                 console.error(error);
             }
         });
+
+        // Навигация между экранами
+        navHome.addEventListener('click', () => {
+            homeScreen.classList.add('active');
+            statsScreen.classList.remove('active');
+            navHome.classList.add('active');
+            navStats.classList.remove('active');
+        });
+
+        navStats.addEventListener('click', () => {
+            statsScreen.classList.add('active');
+            homeScreen.classList.remove('active');
+            navStats.classList.add('active');
+            navHome.classList.remove('active');
+            updateStats();
+        });
+
+        // Функция обновления статистики
+        function updateStats() {
+            const friendCountValue = friends.length;
+            friendCount.textContent = friendCountValue;
+
+            let totalSeconds = 0;
+            friends.forEach(friend => {
+                const friendRef = database.ref(`users/${friend.id}`);
+                friendRef.on('value', (snapshot) => {
+                    const friendData = snapshot.val();
+                    if (friendData?.startTime) {
+                        const start = new Date(friendData.startTime);
+                        const now = new Date();
+                        const diff = Math.max(0, now - start);
+                        totalSeconds += diff / 1000; // Суммируем в секундах
+                    }
+                });
+            });
+            const days = Math.floor(totalSeconds / (3600 * 24));
+            const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            totalSoberTime.textContent = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
+        }
 
         // Анимация появления друзей
         friendsList.addEventListener('animationend', (e) => {
