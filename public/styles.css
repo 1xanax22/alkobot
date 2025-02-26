@@ -120,7 +120,7 @@ li {
 }
 
 .invite-section button {
-    width: 250px; /* Увеличенная ширина для акцента */
+    width: 250px;
     padding: 15px;
     background-color: #00cc00;
     color: #1a1a1a;
@@ -163,33 +163,4 @@ li {
 .nav-btn {
     flex: 1;
     padding: 12px 18px;
-    background-color: #333333;
-    color: #ffffff;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    margin: 0 8px;
-    font-size: 1em;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.nav-btn.active {
-    background-color: #00cc00;
-    color: #1a1a1a;
-    font-weight: 500;
-}
-
-.nav-btn:hover {
-    background-color: #444444;
-    transform: scale(1.05);
-}
-
-.nav-btn:hover:not(.active) {
-    background-color: #444444;
-}
+    background-color: #
