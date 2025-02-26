@@ -2,6 +2,24 @@
 const tg = window.Telegram.WebApp;
 tg.ready();
 
+// Функция для проверки загрузки Firebase
+function loadFirebase() {
+    return new Promise((resolve, reject) => {
+        const checkFirebase = setInterval(() => {
+            if (typeof firebase !== 'undefined') {
+                clearInterval(checkFirebase);
+                resolve();
+            }
+        }, 100); // Проверяем каждые 100мс
+
+        // Тайм-аут на 5 секунд
+        setTimeout(() => {
+            clearInterval(checkFirebase);
+            reject(new Error('Firebase SDK не загрузился за 5 секунд'));
+        }, 5000);
+    });
+}
+
 // Загружаем конфигурацию Firebase и токен бота через API Vercel
 fetch('/api/firebase')
     .then(response => {
@@ -13,17 +31,16 @@ fetch('/api/firebase')
     .then(data => {
         const { firebaseConfig, botToken } = data;
 
-        // Проверка загрузки Firebase SDK
-        if (typeof firebase === 'undefined') {
-            console.error('Firebase SDK не загружен');
-            alert('Ошибка: Firebase SDK не загружен. Проверь подключение в index.html.');
-            return;
-        }
-
-        // Инициализация Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
+        // Ждём загрузки Firebase SDK
+        return loadFirebase().then(() => {
+            if (typeof firebase === 'undefined') {
+                throw new Error('Firebase SDK не загружен');
+            }
+            firebase.initializeApp(firebaseConfig);
+            return { database: firebase.database(), botToken };
+        });
+    })
+    .then(({ database, botToken }) => {
         // Элементы DOM
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
