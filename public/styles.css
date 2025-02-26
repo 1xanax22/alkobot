@@ -115,19 +115,20 @@ li {
 }
 
 .invite-section {
-    margin: 15px 0;
+    margin: 20px 0;
+    text-align: center;
 }
 
 .invite-section button {
-    width: 200px; /* Фиксированная ширина для выделения */
-    padding: 12px;
+    width: 250px; /* Увеличенная ширина для акцента */
+    padding: 15px;
     background-color: #00cc00;
     color: #1a1a1a;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 1em;
+    font-size: 1.1em;
     font-family: 'Roboto', sans-serif;
 }
 
