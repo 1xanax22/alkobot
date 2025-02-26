@@ -180,7 +180,6 @@ fetch('/api/firebase')
                 navStats.classList.remove('active');
                 btn.classList.add('active');
                 if (screen === statsScreen) updateStats();
-                console.log(`Переключено на ${screen.id}, active: ${btn.classList.contains('active')}`); // Отладка
             };
         }
 
