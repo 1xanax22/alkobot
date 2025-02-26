@@ -60,7 +60,7 @@ fetch('/api/firebase')
             }
             const now = new Date();
             const start = new Date(startTime);
-            const diff = Math.max(0, now - start); // Убеждаемся, что разница не отрицательная
+            const diff = Math.max(0, now - start);
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -68,7 +68,6 @@ fetch('/api/firebase')
             timerDisplay.innerText = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
             timerDisplay.classList.add('active');
 
-            // Сохраняем в Firebase
             database.ref(`users/${userId}`).set({
                 startTime: startTime,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -77,7 +76,7 @@ fetch('/api/firebase')
 
         // Вызываем обновление таймера при старте или сбросе
         function updateTimerOnce() {
-            if (timerInterval) clearInterval(timerInterval); // Убираем динамическое обновление
+            if (timerInterval) clearInterval(timerInterval);
             updateTimer();
         }
 
@@ -104,8 +103,6 @@ fetch('/api/firebase')
             timerDisplay.classList.remove('active');
             startBtn.style.display = 'inline';
             resetBtn.style.display = 'none';
-
-            // Удаляем данные из Firebase
             database.ref(`users/${userId}`).remove().catch(error => console.error("Ошибка удаления из Firebase:", error));
         });
 
@@ -134,12 +131,9 @@ fetch('/api/firebase')
             return `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
         }
 
-        // Исправленная функция добавления друзей
         addFriendBtn.addEventListener('click', async () => {
             let username = friendUsernameInput.value.trim();
-            if (username.startsWith('@')) {
-                username = username.slice(1); // Убираем @, если есть
-            }
+            if (username.startsWith('@')) username = username.slice(1);
             if (!username) return;
 
             try {
@@ -170,25 +164,24 @@ fetch('/api/firebase')
             }
         });
 
-        // Навигация между экранами с поддержкой касаний
         function handleNavigation(btn, screen) {
             return function () {
-                screen.classList.add('active');
                 homeScreen.classList.remove('active');
                 statsScreen.classList.remove('active');
                 navHome.classList.remove('active');
                 navStats.classList.remove('active');
+                screen.classList.add('active');
                 btn.classList.add('active');
                 if (screen === statsScreen) updateStats();
+                console.log(`Переключено на ${screen.id}, active: ${btn.classList.contains('active')}`);
             };
         }
 
         navHome.addEventListener('click', handleNavigation(navHome, homeScreen));
-        navHome.addEventListener('touchstart', handleNavigation(navHome, homeScreen)); // Поддержка касаний
+        navHome.addEventListener('touchstart', handleNavigation(navHome, homeScreen));
         navStats.addEventListener('click', handleNavigation(navStats, statsScreen));
-        navStats.addEventListener('touchstart', handleNavigation(navStats, statsScreen)); // Поддержка касаний
+        navStats.addEventListener('touchstart', handleNavigation(navStats, statsScreen));
 
-        // Функция обновления статистики
         function updateStats() {
             const friendCountValue = friends.length;
             friendCount.textContent = friendCountValue;
@@ -202,7 +195,7 @@ fetch('/api/firebase')
                         const start = new Date(friendData.startTime);
                         const now = new Date();
                         const diff = Math.max(0, now - start);
-                        totalSeconds += diff / 1000; // Суммируем в секундах
+                        totalSeconds += diff / 1000;
                     }
                 });
             });
@@ -213,11 +206,8 @@ fetch('/api/firebase')
             totalSoberTime.textContent = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
         }
 
-        // Анимация появления друзей
         friendsList.addEventListener('animationend', (e) => {
-            if (e.animationName === 'fadeIn') {
-                e.target.style.opacity = 1;
-            }
+            if (e.animationName === 'fadeIn') e.target.style.opacity = 1;
         });
     })
     .catch(error => {
