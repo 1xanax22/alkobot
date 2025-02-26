@@ -185,7 +185,7 @@ li {
 }
 
 .nav-btn:hover {
-    background-color: #34bc34;
+    background-color: #ffe9e9db;
     transform: scale(1.02);
 }
 
