@@ -15,7 +15,7 @@ body {
 .container {
     flex: 1;
     text-align: center;
-    background-color: #2d2d2d;
+    background-color: #181818;
     padding: 20px;
     border-radius: 15px 15px 0 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
