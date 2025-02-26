@@ -12,6 +12,13 @@ fetch('/api/firebase')
     })
     .then(data => {
         const { firebaseConfig, botToken } = data;
+
+        // Инициализация Firebase
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase SDK не загружен');
+            alert('Ошибка: Firebase SDK не загружен. Проверь подключение в index.html.');
+            return;
+        }
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -118,7 +125,7 @@ fetch('/api/firebase')
             if (!username) return;
 
             try {
-                // Получаем ID по никнейму через Telegram API с токеном из Vercel
+                // Получаем ID по никнейму через Telegram API
                 const response = await fetch(`https://api.telegram.org/bot${botToken}/getChat?chat_id=@${username}`);
                 const data = await response.json();
                 if (data.ok) {
