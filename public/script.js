@@ -43,8 +43,9 @@ fetch('/api/firebase')
         // Хранение данных
         let startTime = localStorage.getItem(`startTime_${userId}`) || null;
         let friends = JSON.parse(localStorage.getItem(`friends_${userId}`)) || [];
-        let timerInterval = null; // Переменная для хранения интервала
+        let timerInterval = null; // Переменная для хранения интервала (теперь не используется)
 
+        // Функция обновления статичного таймера
         function updateTimer() {
             if (!startTime) {
                 timerDisplay.innerText = 'Нажми "Старт"!';
@@ -53,12 +54,12 @@ fetch('/api/firebase')
             }
             const now = new Date();
             const start = new Date(startTime);
-            const diff = now - start;
+            const diff = Math.max(0, now - start); // Убеждаемся, что разница не отрицательная
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            timerDisplay.innerText = `${days} дней, ${hours} часов, ${minutes} минут, ${seconds} секунд`;
+            timerDisplay.innerText = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
             timerDisplay.classList.add('active');
 
             // Сохраняем в Firebase
@@ -68,16 +69,16 @@ fetch('/api/firebase')
             }).catch(error => console.error("Ошибка сохранения в Firebase:", error));
         }
 
-        function startTimerInterval() {
-            if (timerInterval) clearInterval(timerInterval); // Очищаем старый интервал
-            timerInterval = setInterval(updateTimer, 1000);
+        // Вызываем обновление таймера при старте или сбросе
+        function updateTimerOnce() {
+            if (timerInterval) clearInterval(timerInterval); // Убираем динамическое обновление
             updateTimer();
         }
 
         if (startTime) {
             startBtn.style.display = 'none';
             resetBtn.style.display = 'inline';
-            startTimerInterval();
+            updateTimerOnce();
         }
 
         startBtn.addEventListener('click', () => {
@@ -85,7 +86,7 @@ fetch('/api/firebase')
             localStorage.setItem(`startTime_${userId}`, startTime);
             startBtn.style.display = 'none';
             resetBtn.style.display = 'inline';
-            startTimerInterval();
+            updateTimerOnce();
         });
 
         resetBtn.addEventListener('click', () => {
@@ -119,16 +120,21 @@ fetch('/api/firebase')
         function calculateTime(startTimeISO) {
             const start = new Date(startTimeISO);
             const now = new Date();
-            const diff = now - start;
+            const diff = Math.max(0, now - start);
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            return `${days} дней, ${hours} часов, ${minutes} минут, ${seconds} секунд`;
+            return `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
         }
 
+        // Исправленная функция добавления друзей с поддержкой @ и без
         addFriendBtn.addEventListener('click', async () => {
-            const username = friendUsernameInput.value.trim().replace('@', '');
+            let username = friendUsernameInput.value.trim();
+            // Удаляем @, если оно есть, и добавляем, если отсутствует
+            if (username.startsWith('@')) {
+                username = username.slice(1); // Убираем @, если есть
+            }
             if (!username) return;
 
             try {
@@ -149,6 +155,8 @@ fetch('/api/firebase')
                         localStorage.setItem(`friends_${userId}`, JSON.stringify(friends));
                         renderFriends();
                         friendUsernameInput.value = '';
+                    } else {
+                        alert('Этот друг уже добавлен!');
                     }
                 } else {
                     alert('Пользователь не найден или ник неверный!');
