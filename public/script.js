@@ -166,14 +166,15 @@ fetch('/api/firebase')
             }
         });
 
-        // Функция открытия Telegram для отправки приглашения
+        // Функция открытия Telegram для отправки приглашения с изображением
         inviteFriendBtn.addEventListener('click', () => {
-            const botUsername = 'AlkoBot01'; // Твоё имя бота
+            const botUsername = 'stopalko01_bot'; // Твоё имя бота
             const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
+            const imageUrl = 'https://i.imgur.com/abc123xyz.jpg'; // Замени на реальный URL твоего изображения
             const message = encodeURIComponent(
-                `Приглашение от друга!\nЯ завершил задание в приложении "Я не пью!" — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к награде!\n${inviteLink}`
+                `Приглашение от друга!\nЯ не пью уже ${timerDisplay.innerText} — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к трезвости!\n${inviteLink}`
             );
-            const telegramLink = `https://t.me/share/url?url=${inviteLink}&text=${message}`;
+            const telegramLink = `https://t.me/share/url?url=${inviteLink}&text=${message}&media=${imageUrl}`;
             tg.openTelegramLink(telegramLink);
             console.log('Invite Link Opened:', telegramLink);
         });
