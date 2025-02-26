@@ -125,31 +125,33 @@ li {
 .nav-btn {
     flex: 1;
     padding: 12px 18px; /* Уменьшен внутренний отступ для компактности */
-    background-color: #00cc00; /* Зелёный цвет для всех кнопок по умолчанию */
-    color: #1a1a1a;
+    background-color: #333333; /* Серый фон для неактивных кнопок */
+    color: #ffffff;
     border: none;
-    border-radius: 8px; /* Немного уменьшен радиус */
+    border-radius: 15px; /* Увеличены закругления для эргономики на iPhone */
     cursor: pointer;
     margin: 0 8px; /* Уменьшен margin */
     font-size: 1em; /* Оставлен размер шрифта */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     height: 100%; /* Занимает всю высоту панели */
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Roboto', sans-serif; /* Новый шрифт */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Лёгкая тень для 3D-эффекта */
 }
 
 .nav-btn.active {
-    background-color: #00cc00; /* Активная вкладка остаётся зелёной */
+    background-color: #00cc00; /* Зелёный цвет только для активной вкладки */
     color: #1a1a1a;
-    font-weight: 500; /* Немного выделяем активную вкладку */
+    font-weight: 500; /* Выделяем активную вкладку */
 }
 
 .nav-btn:hover {
-    background-color: #009900;
+    background-color: #444444; /* Серый при наведении для неактивных */
+    transform: scale(1.05);
 }
 
 .nav-btn:hover:not(.active) {
-    background-color: #444444; /* Серый для неактивных при наведении */
+    background-color: #444444; /* Убедимся, что неактивные при наведении серые */
 }
