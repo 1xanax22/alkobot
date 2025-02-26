@@ -170,7 +170,7 @@ fetch('/api/firebase')
         inviteFriendBtn.addEventListener('click', () => {
             const botUsername = 'stopalko01_bot'; // Твоё имя бота
             const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
-            const imageUrl = 'https://i.imgur.com/abc123xyz.jpg'; // Замени на реальный URL твоего изображения
+            const imageUrl = 'https://ibb.co/ynCR6T3M'; // Замени на реальный URL твоего изображения
             const message = encodeURIComponent(
                 `Приглашение от друга!\nЯ не пью уже ${timerDisplay.innerText} — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к трезвости!\n${inviteLink}`
             );
