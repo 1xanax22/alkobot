@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Я не пью!</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -15,28 +15,31 @@
         <div id="homeScreen" class="screen active">
             <h1>Я не пью!</h1>
             <div id="timer" class="timer">Нажми "Старт"!</div>
-            <button id="startBtn">Старт</button>
-            <button id="resetBtn" style="display: none;">Сбросить</button>
-
+            <div class="button-group">
+                <button id="startBtn">Старт</button>
+                <button id="resetBtn" style="display: none;">Сбросить</button>
+            </div>
             <h2>Мои друзья</h2>
             <ul id="friendsList"></ul>
-            <input type="text" id="friendUsername" placeholder="Telegram ник друга (например, @username)">
-            <button id="addFriendBtn">Добавить друга</button>
+            <div class="input-group">
+                <input type="text" id="friendUsername" placeholder="Введите ник друга (с @ или без)">
+                <button id="addFriendBtn">Добавить</button>
+            </div>
         </div>
 
         <!-- Экран статистики -->
         <div id="statsScreen" class="screen">
             <h1>Статистика друзей</h1>
             <div id="statsContent">
-                <p>Общее количество друзей: <span id="friendCount">0</span></p>
-                <p>Общее время трезвости друзей: <span id="totalSoberTime">0 дн, 0 ч, 0 мин, 0 сек</span></p>
+                <p>Друзей: <span id="friendCount">0</span></p>
+                <p>Общее время трезвости: <span id="totalSoberTime">0 дн, 0 ч, 0 мин, 0 сек</span></p>
             </div>
         </div>
     </div>
 
     <!-- Нижняя панель навигации -->
     <div class="nav-bar">
-        <button id="navHome" class="nav-btn active">Главная</button>
+        <button id="navHome" class="nav-btn">Главная</button>
         <button id="navStats" class="nav-btn">Статистика</button>
     </div>
 
