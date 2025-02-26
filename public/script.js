@@ -202,4 +202,25 @@ fetch('/api/firebase')
                 friendRef.on('value', (snapshot) => {
                     const friendData = snapshot.val();
                     if (friendData?.startTime) {
-                        const start = new Date(friendData
+                        const start = new Date(friendData.startTime);
+                        const now = new Date();
+                        const diff = Math.max(0, now - start);
+                        totalSeconds += diff / 1000;
+                    }
+                });
+            });
+            const days = Math.floor(totalSeconds / (3600 * 24));
+            const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            totalSoberTime.textContent = `${days} дн, ${hours} ч, ${minutes} мин, ${seconds} сек`;
+        }
+
+        friendsList.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeIn') e.target.style.opacity = 1;
+        });
+    })
+    .catch(error => {
+        console.error("Ошибка загрузки конфигурации Firebase:", error);
+        alert('Не удалось подключиться к Firebase. Проверь настройки сервера.');
+    });
