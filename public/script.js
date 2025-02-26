@@ -13,12 +13,14 @@ fetch('/api/firebase')
     .then(data => {
         const { firebaseConfig, botToken } = data;
 
-        // Инициализация Firebase
+        // Проверка загрузки Firebase SDK
         if (typeof firebase === 'undefined') {
             console.error('Firebase SDK не загружен');
             alert('Ошибка: Firebase SDK не загружен. Проверь подключение в index.html.');
             return;
         }
+
+        // Инициализация Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
