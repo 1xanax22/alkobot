@@ -1,26 +1,12 @@
 // Инициализация Telegram Web App
-const tg = window.Telegram.WebApp;
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+import { getDatabase, ref, set, onValue, remove } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js';
+import { WebApp } from 'https://telegram.org/js/telegram-web-app.js';
+
+const tg = WebApp;
 tg.ready();
 
-// Функция для проверки загрузки Firebase
-function loadFirebase() {
-    return new Promise((resolve, reject) => {
-        const checkFirebase = setInterval(() => {
-            if (typeof firebase !== 'undefined') {
-                clearInterval(checkFirebase);
-                resolve();
-            }
-        }, 100); // Проверяем каждые 100мс
-
-        // Тайм-аут на 5 секунд
-        setTimeout(() => {
-            clearInterval(checkFirebase);
-            reject(new Error('Firebase SDK не загрузился за 5 секунд'));
-        }, 5000);
-    });
-}
-
-// Загружаем конфигурацию Firebase и токен бота через API Vercel
+// Ваш конфиг Firebase (загружаем через API Vercel)
 fetch('/api/firebase')
     .then(response => {
         if (!response.ok) {
@@ -31,16 +17,10 @@ fetch('/api/firebase')
     .then(data => {
         const { firebaseConfig, botToken } = data;
 
-        // Ждём загрузки Firebase SDK
-        return loadFirebase().then(() => {
-            if (typeof firebase === 'undefined') {
-                throw new Error('Firebase SDK не загружен');
-            }
-            firebase.initializeApp(firebaseConfig);
-            return { database: firebase.database(), botToken };
-        });
-    })
-    .then(({ database, botToken }) => {
+        // Инициализация Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         // Элементы DOM
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
@@ -74,9 +54,9 @@ fetch('/api/firebase')
             timerDisplay.classList.add('active');
 
             // Сохраняем в Firebase
-            database.ref(`users/${userId}`).set({
+            set(ref(database, `users/${userId}`), {
                 startTime: startTime,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                timestamp: Date.now()
             }).catch(error => console.error("Ошибка сохранения в Firebase:", error));
         }
 
@@ -111,14 +91,14 @@ fetch('/api/firebase')
             resetBtn.style.display = 'none';
 
             // Удаляем данные из Firebase
-            database.ref(`users/${userId}`).remove().catch(error => console.error("Ошибка удаления из Firebase:", error));
+            remove(ref(database, `users/${userId}`)).catch(error => console.error("Ошибка удаления из Firebase:", error));
         });
 
         function renderFriends() {
             friendsList.innerHTML = '';
             friends.forEach(friend => {
-                const friendRef = database.ref(`users/${friend.id}`);
-                friendRef.on('value', (snapshot) => {
+                const friendRef = ref(database, `users/${friend.id}`);
+                onValue(friendRef, (snapshot) => {
                     const friendData = snapshot.val();
                     const li = document.createElement('li');
                     li.innerText = `${friend.username || `Друг ${friend.id}`}: ${friendData?.startTime ? calculateTime(friendData.startTime) : 'не начал'}`;
@@ -150,8 +130,8 @@ fetch('/api/firebase')
                 if (data.ok) {
                     const friendId = data.result.id;
                     // Проверяем, зарегистрирован ли друг в Firebase
-                    const friendRef = database.ref(`users/${friendId}`);
-                    const snapshot = await friendRef.once('value');
+                    const friendRef = ref(database, `users/${friendId}`);
+                    const snapshot = await new Promise(resolve => onValue(friendRef, resolve));
                     if (!snapshot.exists()) {
                         alert('Друг не зарегистрирован! Пусть он откроет приложение и начнёт таймер.');
                         return;
