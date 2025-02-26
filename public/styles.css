@@ -41,7 +41,7 @@ h1 {
     margin: 20px 0;
     padding: 15px;
     border-radius: 100px;
-    box-shadow: 0 0 100px rgba(100 255 23), 0 0 50px rgb(19 255 0 / 38%);
+    box-shadow: 0 0 100px rgb(54 164 0 / 79%), 0 0 50px rgb(19 255 0 / 39%);
     transition: none;
 }
 
@@ -152,7 +152,7 @@ li {
     background-color: #2d2d2d;
     padding: 10px 0;
     border-top: 1px solid #444444;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 -2px 5px rgb(100 255 23 / 51%);
     position: fixed;
     bottom: 0;
     width: 100%;
