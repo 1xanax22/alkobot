@@ -166,28 +166,16 @@ fetch('/api/firebase')
             }
         });
 
-        // Функция отправки приглашения через Telegram Web App
+        // Функция открытия Telegram для отправки приглашения
         inviteFriendBtn.addEventListener('click', () => {
             const botUsername = 'AlkoBot01'; // Твоё имя бота
             const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
-            const message = {
-                text: `Приглашение от друга!\nЯ завершил задание в приложении "Я не пью!" — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к награде!\n${inviteLink}`,
-                // Можно добавить изображение, как на скриншоте, но это требует URL картинки
-                // Например: "https://example.com/invite-image.jpg"
-            };
-            tg.showPopup({
-                message: 'Отправить приглашение?',
-                buttons: [
-                    { id: 'cancel', type: 'cancel' },
-                    { id: 'send', type: 'default', text: 'Отправить' }
-                ]
-            }, (btnId) => {
-                if (btnId === 'send') {
-                    tg.sendData(JSON.stringify(message)); // Отправка сообщения
-                    console.log('Invite sent with link:', inviteLink);
-                    alert('Приглашение отправлено! Друг должен открыть ссылку и начать таймер.');
-                }
-            });
+            const message = encodeURIComponent(
+                `Приглашение от друга!\nЯ завершил задание в приложении "Я не пью!" — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к награде!\n${inviteLink}`
+            );
+            const telegramLink = `https://t.me/share/url?url=${inviteLink}&text=${message}`;
+            tg.openTelegramLink(telegramLink);
+            console.log('Invite Link Opened:', telegramLink);
         });
 
         function handleNavigation(btn, screen) {
