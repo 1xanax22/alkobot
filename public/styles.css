@@ -114,6 +114,32 @@ li {
     font-family: 'Roboto', sans-serif;
 }
 
+.invite-section {
+    margin: 15px 0;
+}
+
+.invite-section button {
+    width: 200px; /* Фиксированная ширина для выделения */
+    padding: 12px;
+    background-color: #00cc00;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.invite-section button:hover {
+    background-color: #009900;
+    transform: scale(1.05);
+}
+
+.invite-section button:active {
+    background-color: #007700;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
