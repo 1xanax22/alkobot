@@ -55,7 +55,7 @@ fetch('/api/firebase')
         // Функция обновления статичного таймера
         function updateTimer() {
             if (!startTime) {
-                timerDisplay.innerText = 'Нажми "Старт"!';
+                timerDisplay.innerText = 'Нажmi "Старт"!';
                 timerDisplay.classList.remove('active');
                 return;
             }
@@ -145,8 +145,9 @@ fetch('/api/firebase')
                     const friendId = data.result.id;
                     const friendRef = database.ref(`users/${friendId}`);
                     const snapshot = await new Promise(resolve => friendRef.on('value', resolve));
+                    // Проверяем, зарегистрирован ли пользователь, но не требуем startTime
                     if (!snapshot.exists()) {
-                        alert('Друг не зарегистрирован! Пусть он откроет приложение и начнёт таймер.');
+                        alert('Друг не активировал приложение! Пригласите его заново.');
                         return;
                     }
                     if (!friends.some(f => f.id === friendId)) {
@@ -158,7 +159,7 @@ fetch('/api/firebase')
                         alert('Этот друг уже добавлен!');
                     }
                 } else {
-                    alert(`Пользователь не найден или ник неверный! Ошибка: ${data.description}. Попробуйте пригласить друга.`);
+                    alert(`Пользователь не найден или ник неверный! Ошибка: ${data.description}. Пригласите друга.`);
                 }
             } catch (error) {
                 alert('Ошибка при добавлении друга. Проверь ник и попробуй ещё раз.');
@@ -170,14 +171,31 @@ fetch('/api/firebase')
         inviteFriendBtn.addEventListener('click', () => {
             const botUsername = 'stopalko01_bot'; // Твоё имя бота
             const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
-            const imageUrl = 'https://ibb.co/ynCR6T3M'; // Замени на реальный URL твоего изображения
+            const imageUrl = 'https://i.imgur.com/abc123xyz.jpg'; // Замени на реальный URL твоего изображения
             const message = encodeURIComponent(
-                `Приглашение от друга!\nЯ не пью уже ${timerDisplay.innerText} — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к трезвости!\n`
+                `Приглашение от друга!\nЯ не пью уже ${timerDisplay.innerText} — теперь твоя очередь сиять!\nПрисоединяйся и начни свой путь к трезвости!\n${inviteLink}`
             );
             const telegramLink = `https://t.me/share/url?url=${inviteLink}&text=${message}&media=${imageUrl}`;
             tg.openTelegramLink(telegramLink);
             console.log('Invite Link Opened:', telegramLink);
         });
+
+        // Обработка стартового параметра для авторегистрации друга
+        const startParam = tg.initDataUnsafe.start_param;
+        if (startParam && startParam.startsWith('invite_')) {
+            const inviterId = startParam.replace('invite_', '');
+            const currentUserRef = database.ref(`users/${userId}`);
+            currentUserRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    currentUserRef.set({
+                        inviterId: inviterId,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    }).then(() => {
+                        console.log(`Пользователь ${userId} зарегистрирован по приглашению от ${inviterId}`);
+                    }).catch(error => console.error("Ошибка регистрации:", error));
+                }
+            });
+        }
 
         function handleNavigation(btn, screen) {
             return function () {
