@@ -16,7 +16,7 @@ fetch('/api/firebase')
         return response.json();
     })
     .then(data => {
-        const { firebaseConfig, botToken } = data;
+        const { firebaseConfig, botToken, botUsername } = data;
 
         // Проверка загрузки Firebase SDK
         if (typeof firebase === 'undefined') {
@@ -168,9 +168,8 @@ fetch('/api/firebase')
             }
         });
 
-        // Функция открытия Telegram для отправки приглашения с изображением
+        // Функция для отправки приглашения
         inviteFriendBtn.addEventListener('click', () => {
-            const botUsername = 'stopalko01_bot'; // Твоё имя бота
             const inviteLink = `https://t.me/${botUsername}?start=invite_${userId}`;
             const imageUrl = 'https://i.imgur.com/abc123xyz.jpg'; // Замени на реальный URL твоего изображения
             const message = encodeURIComponent(
