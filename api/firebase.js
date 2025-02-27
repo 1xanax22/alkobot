@@ -1,5 +1,6 @@
 export default function handler(req, res) {
-    const firebaseConfig = {
+    // Полная конфигурация только на сервере
+    const fullConfig = {
         apiKey: process.env.FIREBASE_API_KEY,
         authDomain: process.env.FIREBASE_AUTH_DOMAIN,
         databaseURL: process.env.FIREBASE_DATABASE_URL,
@@ -9,8 +10,17 @@ export default function handler(req, res) {
         appId: process.env.FIREBASE_APP_ID,
         measurementId: process.env.FIREBASE_MEASUREMENT_ID
     };
+
+    // Отправляем клиенту только необходимые поля
+    const clientConfig = {
+        apiKey: fullConfig.apiKey,
+        authDomain: fullConfig.authDomain,
+        databaseURL: fullConfig.databaseURL,
+        projectId: fullConfig.projectId
+    };
+
     res.status(200).json({
-        firebaseConfig: firebaseConfig,
+        firebaseConfig: clientConfig,
         botToken: process.env.BOT_TOKEN
     });
 }
