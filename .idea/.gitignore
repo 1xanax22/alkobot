@@ -1,3 +1,11 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+.env
+.env.local
+.env.*.local
+node_modules/
+.DS_Store
+*.log
+.vercel
+
