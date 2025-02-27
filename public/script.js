@@ -55,7 +55,7 @@ fetch('/api/firebase')
         // Функция обновления статичного таймера
         function updateTimer() {
             if (!startTime) {
-                timerDisplay.innerText = 'Нажmi "Старт"!';
+                timerDisplay.innerText = 'Нажми "Старт"!';
                 timerDisplay.classList.remove('active');
                 return;
             }
@@ -138,18 +138,19 @@ fetch('/api/firebase')
             if (!username) return;
 
             try {
-                const response = await fetch(`https://api.telegram.org/bot${botToken}/getChat?chat_id=@${username}`);
+                const response = await fetch(`/api/telegram?username=${encodeURIComponent(username)}`);
                 const data = await response.json();
-                console.log('API Response:', data); // Отладка ответа API
+                
                 if (data.ok) {
-                    const friendId = data.result.id;
+                    const friendId = data.userId;
                     const friendRef = database.ref(`users/${friendId}`);
                     const snapshot = await new Promise(resolve => friendRef.on('value', resolve));
-                    // Проверяем, зарегистрирован ли пользователь, но не требуем startTime
+                    
                     if (!snapshot.exists()) {
                         alert('Друг не активировал приложение! Пригласите его заново.');
                         return;
                     }
+                    
                     if (!friends.some(f => f.id === friendId)) {
                         friends.push({ id: friendId, username: `@${username}` });
                         localStorage.setItem(`friends_${userId}`, JSON.stringify(friends));
@@ -159,11 +160,11 @@ fetch('/api/firebase')
                         alert('Этот друг уже добавлен!');
                     }
                 } else {
-                    alert(`Пользователь не найден или ник неверный! Ошибка: ${data.description}. Пригласите друга.`);
+                    alert('Пользователь не найден или ник неверный! Пригласите друга.');
                 }
             } catch (error) {
                 alert('Ошибка при добавлении друга. Проверь ник и попробуй ещё раз.');
-                console.error('Fetch Error:', error);
+                console.error('API Error:', error);
             }
         });
 
